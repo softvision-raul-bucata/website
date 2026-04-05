@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===== MENU =====
+  // =========================
+  // BURGER MENU
+  // =========================
   const menu = document.getElementById("menu");
   const menuBtn = document.querySelector(".menu-btn");
   const navLinks = document.querySelectorAll(".nav-links a");
@@ -23,7 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===== IMAGE LIGHTBOX =====
+  // =========================
+  // IMAGE LIGHTBOX
+  // =========================
   const images = document.querySelectorAll(".scroll-gallery img");
   let currentIndex = 0;
 
@@ -38,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       align-items: center;
       justify-content: center;
       flex-direction: column;
-      z-index: 9999;
+      z-index: 99999;
     `;
     document.body.appendChild(lightbox);
 
@@ -47,6 +51,8 @@ document.addEventListener("DOMContentLoaded", () => {
       max-width: 90%;
       max-height: 80%;
       border-radius: 12px;
+      position: relative;
+      z-index: 2;
     `;
     lightbox.appendChild(img);
 
@@ -55,41 +61,48 @@ document.addEventListener("DOMContentLoaded", () => {
       color: white;
       margin-top: 10px;
       font-size: 14px;
+      z-index: 2;
     `;
     lightbox.appendChild(counter);
 
-    const prev = document.createElement("div");
-    const next = document.createElement("div");
-
-    [prev, next].forEach(btn => {
+    function makeBtn(text, side) {
+      const btn = document.createElement("div");
+      btn.innerHTML = text;
       btn.style.cssText = `
         position: absolute;
         top: 50%;
+        ${side}: 20px;
         transform: translateY(-50%);
-        font-size: 40px;
+        font-size: 45px;
         color: white;
         cursor: pointer;
-        z-index: 10000;
-        padding: 10px;
+        z-index: 999999;
+        user-select: none;
+        background: rgba(255,255,255,0.1);
+        width: 55px;
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
       `;
       lightbox.appendChild(btn);
-    });
+      return btn;
+    }
 
-    prev.style.left = "20px";
-    next.style.right = "20px";
-
-    prev.innerHTML = "‹";
-    next.innerHTML = "›";
+    const prev = makeBtn("‹", "left");
+    const next = makeBtn("›", "right");
 
     const close = document.createElement("div");
     close.innerHTML = "✕";
     close.style.cssText = `
       position: absolute;
       top: 20px;
-      right: 25px;
+      right: 20px;
       font-size: 30px;
       color: white;
       cursor: pointer;
+      z-index: 999999;
     `;
     lightbox.appendChild(close);
 
@@ -113,16 +126,23 @@ document.addEventListener("DOMContentLoaded", () => {
       image.addEventListener("click", () => openImage(i));
     });
 
-    next.onclick = nextImage;
-    prev.onclick = prevImage;
-    close.onclick = () => lightbox.style.display = "none";
+    next.addEventListener("click", nextImage);
+    prev.addEventListener("click", prevImage);
+
+    close.addEventListener("click", () => {
+      lightbox.style.display = "none";
+    });
 
     lightbox.addEventListener("click", (e) => {
-      if (e.target === lightbox) lightbox.style.display = "none";
+      if (e.target === lightbox) {
+        lightbox.style.display = "none";
+      }
     });
   }
 
-  // ===== VIDEO LIGHTBOX =====
+  // =========================
+  // VIDEO LIGHTBOX
+  // =========================
   const videos = document.querySelectorAll(".scroll-gallery video");
 
   if (videos.length > 0) {
@@ -135,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       display: none;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 99999;
     `;
     document.body.appendChild(vLightbox);
 
