@@ -18,38 +18,45 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// create lightbox
-const lightbox = document.createElement("div");
-lightbox.style.position = "fixed";
-lightbox.style.top = "0";
-lightbox.style.left = "0";
-lightbox.style.width = "100%";
-lightbox.style.height = "100%";
-lightbox.style.background = "rgba(0,0,0,0.9)";
-lightbox.style.display = "none";
-lightbox.style.alignItems = "center";
-lightbox.style.justifyContent = "center";
-lightbox.style.zIndex = "9999";
-document.body.appendChild(lightbox);
+document.addEventListener("DOMContentLoaded", () => {
+  const images = document.querySelectorAll(".scroll-gallery img");
 
-const img = document.createElement("img");
-img.style.maxWidth = "90%";
-img.style.maxHeight = "90%";
-img.style.borderRadius = "12px";
-lightbox.appendChild(img);
+  console.log("Gallery images found:", images.length);
 
-  // click any image
-images.forEach(image => {
-  image.style.cursor = "pointer";
+  const lightbox = document.createElement("div");
+  lightbox.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  `;
+  document.body.appendChild(lightbox);
 
-  image.addEventListener("click", () => {
-    img.src = image.src;
+  const img = document.createElement("img");
+  img.style.cssText = `
+    max-width: 90%;
+    max-height: 80%;
+  `;
+  lightbox.appendChild(img);
+
+  function open(src) {
+    img.src = src;
     lightbox.style.display = "flex";
+  }
+
+  images.forEach((image) => {
+    image.style.cursor = "pointer";
+
+    image.addEventListener("click", () => {
+      console.log("clicked image:", image.src);
+      open(image.src);
     });
   });
 
-  // close on click
-lightbox.addEventListener("click", () => {
-  lightbox.style.display = "none";
+  lightbox.addEventListener("click", () => {
+    lightbox.style.display = "none";
   });
 });
