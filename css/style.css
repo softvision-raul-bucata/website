@@ -385,3 +385,34 @@ footer {
     font-size: 23px;   /* ensures icon itself scales */
   }
 }
+
+/* ===== MOBILE ONLY: STACK NAV LINKS VERTICALLY ===== */
+@media (max-width: 768px) {
+
+  /* When menu is opened */
+  .nav-links.active {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Stack DESPRE / ANTRENAMENTE / CONTACT */
+  .nav-left {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .nav-left a {
+    display: block;
+    width: 100%;
+  }
+
+  /* Optional: push social icons below links cleanly */
+  .socials {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+  }
+}
