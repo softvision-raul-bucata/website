@@ -413,5 +413,7 @@ footer {
   .socials {
     display: flex;
     margin-top: 10px;
+    justify-content: center;
+    width: 100%
   }
 }
