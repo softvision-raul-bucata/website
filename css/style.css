@@ -193,9 +193,21 @@ section {
   margin-top: 90px;
 }
 
-/* ===== IMAGE GALLERY (OLD GRID REMOVED) ===== */
+/* ===== ORIGINAL GRID GALLERY (RESTORED) ===== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  max-width: 1000px;
+  margin: auto;
+}
 
-/* ===== SCROLL GALLERY (NEW) ===== */
+.gallery img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* ===== SCROLL GALLERY (OPTIONAL USE) ===== */
 .scroll-gallery {
   display: flex;
   gap: 15px;
@@ -230,6 +242,21 @@ section {
 .scroll-gallery img:hover,
 .scroll-gallery video:hover {
   transform: scale(1.03);
+}
+
+/* ===== VIDEO GALLERY (GRID OPTION) ===== */
+.video-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.video-gallery video {
+  width: 100%;
+  border-radius: 12px;
+  background: black;
 }
 
 /* ===== SOCIALS ===== */
