@@ -371,17 +371,17 @@ footer {
   }
 
   .socials .icon-btn {
-    width: 34px;      /* smaller button */
-    height: 34px;
+    width: 43px;      /* smaller button */
+    height: 43px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0;       /* remove extra space */
-    font-size: 16px;  /* controls icon size */
+    font-size: 23px;  /* controls icon size */
     border-radius: 50%;
   }
 
   .socials .icon-btn i {
-    font-size: 16px;   /* ensures icon itself scales */
+    font-size: 23px;   /* ensures icon itself scales */
   }
 }
