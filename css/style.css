@@ -34,9 +34,7 @@ body {
   font-size: 18px;
 }
 
-/* =========================
-   NAV LINKS BASE (MOBILE SAFE)
-   ========================= */
+/* ===== NAV BASE (MOBILE SAFE - DO NOT TOUCH) ===== */
 .nav-links {
   display: flex;
   align-items: center;
@@ -55,21 +53,21 @@ body {
   opacity: 1;
 }
 
-/* TEXT GROUP (NEW - SAFE ADDITION) */
+/* TEXT GROUP (mobile-safe structural addition) */
 .nav-left {
   display: flex;
   align-items: center;
   gap: 14px;
 }
 
-/* SOCIAL ICONS */
+/* SOCIALS */
 .socials {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* ICON BUTTONS (GLOBAL SAFE FIX) */
+/* ICON BUTTONS */
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -88,9 +86,7 @@ body {
   color: white;
 }
 
-/* =========================
-   MOBILE MENU (UNCHANGED BEHAVIOR)
-   ========================= */
+/* ===== MOBILE MENU (UNCHANGED BEHAVIOR) ===== */
 @media (max-width:768px) {
 
   .menu-btn {
@@ -131,18 +127,31 @@ body {
   }
 }
 
-/* =========================
-   DESKTOP IMPROVEMENTS ONLY
-   ========================= */
+/* ===== DESKTOP ONLY IMPROVEMENTS ===== */
 @media (min-width: 769px) {
+
+  .nav-links {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .socials {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 10px;
+  }
 
   .nav-links a {
     font-size: 15px;
     padding: 10px 14px;
     border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: 0.2s ease;
   }
 
