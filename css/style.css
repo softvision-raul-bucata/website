@@ -34,6 +34,7 @@ body {
   font-size: 18px;
 }
 
+/* NAV LINKS BASE */
 .nav-links {
   display: flex;
   align-items: center;
@@ -52,7 +53,7 @@ body {
   opacity: 1;
 }
 
-/* SOCIAL ICONS INLINE */
+/* SOCIAL ICONS (NAV) */
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -71,7 +72,7 @@ body {
   color: white;
 }
 
-/* MOBILE MENU FIX (FULL WIDTH + BETTER SPACING) */
+/* ===== MOBILE MENU ===== */
 @media (max-width:768px) {
   .menu-btn {
     display: block;
@@ -86,8 +87,9 @@ body {
     width: 100%;
     flex-direction: column;
     background: rgba(0,0,0,0.98);
-    padding: 20px;
-    gap: 18px;
+    padding: 30px 20px;
+    gap: 22px;
+    text-align: center;
   }
 
   .nav-links.active {
@@ -99,10 +101,33 @@ body {
     padding: 10px;
   }
 
-  /* social icons inline even in mobile */
   .nav-links .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 46px;
+    height: 46px;
+  }
+}
+
+/* ===== DESKTOP NAV BUTTON UPGRADE (NEW FIX) ===== */
+@media (min-width: 769px) {
+
+  .nav-links a {
+    font-size: 15px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    background: rgba(255,255,255,0.08);
+  }
+
+  .nav-links .icon-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 }
 
@@ -171,7 +196,7 @@ section {
   margin-top: 90px;
 }
 
-/* ===== INFO BOX (kept but now looks cleaner) ===== */
+/* ===== INFO BOX ===== */
 .info-box {
   max-width: 800px;
   margin: 25px auto 0;
@@ -195,7 +220,7 @@ section {
   border-radius: 12px;
 }
 
-/* ===== VIDEO GALLERY (UPDATED) ===== */
+/* ===== VIDEO GALLERY ===== */
 .video-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -208,6 +233,33 @@ section {
   width: 100%;
   border-radius: 12px;
   background: black;
+}
+
+/* ===== SOCIALS (UNCHANGED - GOOD AS IS) ===== */
+.socials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.socials .icon-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  font-size: 18px;
+  transition: 0.2s ease;
+}
+
+.socials .icon-btn:hover {
+  transform: scale(1.1);
+  background: rgba(255,255,255,0.12);
 }
 
 /* ===== FOOTER ===== */
@@ -236,7 +288,7 @@ footer {
   background: rgba(255,255,255,0.15);
 }
 
-/* ===== WHATSAPP (FIXED PERFECT CIRCLE) ===== */
+/* ===== WHATSAPP ===== */
 .whatsapp {
   position: fixed;
   bottom: 20px;
