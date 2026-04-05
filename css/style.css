@@ -243,6 +243,41 @@ footer {
   transform: scale(1.08);
 }
 
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.time-card {
+  background: rgba(255,255,255,0.05);
+  padding: 22px;
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.08);
+  transition: 0.2s ease;
+}
+
+.time-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.08);
+}
+
+.time-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.time {
+  font-size: 18px;
+  font-weight: bold;
+  color: #25D366;
+  margin: 6px 0;
+}
+
 /* MOBILE */
 @media (max-width:768px) {
 
