@@ -191,19 +191,19 @@ section {
   border-radius: 10px;
   background: rgba(255,255,255,0.08);
 
-  color: white;
-  text-decoration: none;
+  color: white !important;
+  text-decoration: none !important;
 
   -webkit-tap-highlight-color: transparent;
 }
 
-/* FORCE ALL LINK STATES */
+/* FORCE ALL STATES (mobile browsers need this) */
 .phone-btn:link,
 .phone-btn:visited,
 .phone-btn:hover,
 .phone-btn:active {
-  color: white;
-  text-decoration: none;
+  color: white !important;
+  text-decoration: none !important;
 }
 
 /* FOOTER */
