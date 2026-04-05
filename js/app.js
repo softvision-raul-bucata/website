@@ -29,6 +29,20 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentIndex = 0;
 
   // LIGHTBOX
+  document.addEventListener("DOMContentLoaded", () => {
+
+  const images = Array.from(document.querySelectorAll(".scroll-gallery img"));
+  const videos = Array.from(document.querySelectorAll(".scroll-gallery video"));
+
+  // BUILD UNIFIED MEDIA LIST
+  const media = [
+    ...images.map(el => ({ type: "img", src: el.src })),
+    ...videos.map(el => ({ type: "video", src: el.querySelector("source").src }))
+  ];
+
+  let currentIndex = 0;
+
+  // LIGHTBOX
   const lightbox = document.createElement("div");
   lightbox.style.cssText = `
     position: fixed;
@@ -37,20 +51,21 @@ document.addEventListener("DOMContentLoaded", () => {
     display: none;
     align-items: center;
     justify-content: center;
-    z-index: 9999;
     flex-direction: column;
+    z-index: 9999;
   `;
   document.body.appendChild(lightbox);
 
-  // IMAGE
-  const img = document.createElement("img");
-  img.style.cssText = `
+  // MEDIA CONTAINER
+  const container = document.createElement("div");
+  container.style.cssText = `
     max-width: 90%;
     max-height: 80%;
-    border-radius: 12px;
-    transition: transform 0.25s ease, opacity 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   `;
-  lightbox.appendChild(img);
+  lightbox.appendChild(container);
 
   // COUNTER
   const counter = document.createElement("div");
@@ -86,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   prevBtn.innerHTML = "‹";
   nextBtn.innerHTML = "›";
 
-  // CLOSE BUTTON
+  // CLOSE
   const closeBtn = document.createElement("div");
   closeBtn.innerHTML = "✕";
   closeBtn.style.cssText = `
@@ -99,57 +114,110 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   lightbox.appendChild(closeBtn);
 
-  // OPEN IMAGE
-  function openImage(index) {
+  let currentVideo = null;
+
+  // OPEN MEDIA
+  function openMedia(index) {
     currentIndex = index;
 
-    img.style.opacity = 0;
+    container.innerHTML = "";
 
-    setTimeout(() => {
-      img.src = images[index].src;
-      img.style.opacity = 1;
-      counter.textContent = `${index + 1} / ${images.length}`;
-    }, 150);
+    const item = media[index];
+
+    counter.textContent = `${index + 1} / ${media.length}`;
+
+    if (item.type === "img") {
+      const img = document.createElement("img");
+      img.src = item.src;
+      img.style.cssText = `
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 12px;
+      `;
+      container.appendChild(img);
+    }
+
+    if (item.type === "video") {
+      const video = document.createElement("video");
+      video.src = item.src;
+      video.controls = true;
+      video.autoplay = true;
+      video.style.cssText = `
+        max-width: 100%;
+        max-height: 80vh;
+        border-radius: 12px;
+      `;
+      container.appendChild(video);
+      currentVideo = video;
+    }
 
     lightbox.style.display = "flex";
   }
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
-    openImage(currentIndex);
+  function nextMedia() {
+    stopVideo();
+    currentIndex = (currentIndex + 1) % media.length;
+    openMedia(currentIndex);
   }
 
-  function prevImage() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    openImage(currentIndex);
+  function prevMedia() {
+    stopVideo();
+    currentIndex = (currentIndex - 1 + media.length) % media.length;
+    openMedia(currentIndex);
   }
 
-  // CLICK IMAGE OPEN
-  images.forEach((image, i) => {
-    image.style.cursor = "pointer";
-    image.addEventListener("click", () => openImage(i));
+  function stopVideo() {
+    if (currentVideo) {
+      currentVideo.pause();
+      currentVideo = null;
+    }
+  }
+
+  // CLICK EVENTS
+  images.forEach((el, i) => {
+    el.style.cursor = "pointer";
+    el.addEventListener("click", () => {
+      const index = media.findIndex(m => m.type === "img" && m.src === el.src);
+      openMedia(index);
+    });
   });
 
-  // BUTTONS
-  nextBtn.addEventListener("click", nextImage);
-  prevBtn.addEventListener("click", prevImage);
-  closeBtn.addEventListener("click", () => lightbox.style.display = "none");
+  videos.forEach((el, i) => {
+    el.style.cursor = "pointer";
+    el.addEventListener("click", () => {
+      const src = el.querySelector("source").src;
+      const index = media.findIndex(m => m.type === "video" && m.src === src);
+      openMedia(index);
+    });
+  });
 
-  // CLICK OUTSIDE CLOSE
+  nextBtn.addEventListener("click", nextMedia);
+  prevBtn.addEventListener("click", prevMedia);
+
+  closeBtn.addEventListener("click", () => {
+    stopVideo();
+    lightbox.style.display = "none";
+  });
+
   lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox) lightbox.style.display = "none";
+    if (e.target === lightbox) {
+      stopVideo();
+      lightbox.style.display = "none";
+    }
   });
 
-  // KEYBOARD
   document.addEventListener("keydown", (e) => {
     if (lightbox.style.display !== "flex") return;
 
-    if (e.key === "Escape") lightbox.style.display = "none";
-    if (e.key === "ArrowRight") nextImage();
-    if (e.key === "ArrowLeft") prevImage();
+    if (e.key === "Escape") {
+      stopVideo();
+      lightbox.style.display = "none";
+    }
+    if (e.key === "ArrowRight") nextMedia();
+    if (e.key === "ArrowLeft") prevMedia();
   });
 
-  // SWIPE SUPPORT (MOBILE)
+  // SWIPE
   let startX = 0;
 
   lightbox.addEventListener("touchstart", (e) => {
@@ -159,16 +227,8 @@ document.addEventListener("DOMContentLoaded", () => {
   lightbox.addEventListener("touchend", (e) => {
     let endX = e.changedTouches[0].clientX;
 
-    if (startX - endX > 50) nextImage();
-    if (endX - startX > 50) prevImage();
-  });
-
-  // ZOOM
-  let zoomed = false;
-
-  img.addEventListener("click", () => {
-    zoomed = !zoomed;
-    img.style.transform = zoomed ? "scale(1.6)" : "scale(1)";
+    if (startX - endX > 50) nextMedia();
+    if (endX - startX > 50) prevMedia();
   });
 
 });
