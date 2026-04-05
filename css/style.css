@@ -359,3 +359,16 @@ footer {
     margin-top: 10px;
   }
 }
+
+/* =========================
+   GALLERY / LIGHTBOX
+========================= */
+
+.scroll-gallery img {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.scroll-gallery img:hover {
+  transform: scale(1.03);
+}
