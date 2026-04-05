@@ -34,6 +34,7 @@ body {
   font-size: 18px;
 }
 
+/* MENU BUTTON */
 .menu-btn {
   display: none;
   font-size: 26px;
@@ -41,83 +42,58 @@ body {
   color: white;
 }
 
-/* NAV LINKS */
+/* NAV LINKS CONTAINER */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 18px;
 }
 
+/* NAV LINKS */
 .nav-links a {
   color: white;
   text-decoration: none;
-  font-size: 14px;
-  opacity: 0.85;
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: 0.2s ease;
 }
 
-/* LEFT LINKS */
+.nav-links a:hover {
+  opacity: 1;
+}
+
+/* LEFT MENU LINKS */
 .nav-left {
   display: flex;
-  gap: 14px;
+  gap: 18px;
 }
 
-/* SOCIALS */
+/* SOCIALS CONTAINER */
 .socials {
   display: flex;
-  gap: 10px;
+  gap: 12px;
 }
 
+/* SOCIAL ICON BUTTONS */
 .icon-btn {
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: 12px;
   background: rgba(255,255,255,0.06);
+  transition: 0.2s ease;
 }
 
-/* MOBILE MENU */
-@media (max-width:768px) {
+.icon-btn i {
+  font-size: 18px;
+}
 
-  .menu-btn {
-    display: block;
-  }
-
-  .nav-links {
-    position: absolute;
-    top: 65px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background: rgba(0,0,0,0.98);
-    padding: 30px 20px;
-    gap: 20px;
-    text-align: center;
-
-    transform: translateY(-15px);
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.25s ease;
-  }
-
-  .nav-links.active {
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .nav-left {
-    flex-direction: column;
-    width: 100%;
-    gap: 16px;
-  }
-
-  .socials {
-    justify-content: center;
-    width: 100%;
-    margin-top: 10px;
-  }
+.icon-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
 }
 
 /* HERO */
@@ -196,11 +172,15 @@ section {
   border-radius: 12px;
 }
 
-/* SOCIAL ICONS */
-.socials .icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+/* MAP BUTTON */
+.map-btn {
+  display: inline-flex;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  text-decoration: none;
 }
 
 /* FOOTER */
@@ -210,17 +190,6 @@ footer {
   font-size: 13px;
   background: #0b0b0b;
   color: #aaa;
-}
-
-/* MAP */
-.map-btn {
-  display: inline-flex;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.08);
-  color: white;
-  text-decoration: none;
 }
 
 /* WHATSAPP */
@@ -234,7 +203,7 @@ footer {
   align-items: center;
   justify-content: center;
 
-  background: #25D366; /* official WhatsApp green */
+  background: #25D366;
   border-radius: 50%;
   font-size: 26px;
   text-decoration: none;
@@ -243,12 +212,58 @@ footer {
   transition: transform 0.2s ease;
 }
 
-/* THIS is what you were missing */
 .whatsapp i {
   color: white;
 }
 
-/* optional but recommended */
 .whatsapp:hover {
   transform: scale(1.08);
+}
+
+/* MOBILE */
+@media (max-width:768px) {
+
+  .menu-btn {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: rgba(0,0,0,0.98);
+    padding: 30px 20px;
+    gap: 20px;
+    text-align: center;
+
+    transform: translateY(-15px);
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.25s ease;
+  }
+
+  .nav-links.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-left {
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .nav-links a {
+    font-size: 18px;
+  }
+
+  .socials {
+    justify-content: center;
+    width: 100%;
+    gap: 14px;
+    margin-top: 10px;
+  }
 }
