@@ -23,11 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-
-  const images = document.querySelectorAll(".scroll-gallery img");
-  let currentIndex = 0;
-
   // LIGHTBOX IMAGES
   document.addEventListener("DOMContentLoaded", () => {
 
