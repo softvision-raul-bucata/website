@@ -34,6 +34,9 @@ body {
   font-size: 18px;
 }
 
+/* =========================
+   NAV LINKS BASE (MOBILE SAFE)
+   ========================= */
 .nav-links {
   display: flex;
   align-items: center;
@@ -52,6 +55,21 @@ body {
   opacity: 1;
 }
 
+/* TEXT GROUP (NEW - SAFE ADDITION) */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* SOCIAL ICONS */
+.socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ICON BUTTONS (GLOBAL SAFE FIX) */
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -70,8 +88,11 @@ body {
   color: white;
 }
 
-/* ===== MOBILE MENU ===== */
+/* =========================
+   MOBILE MENU (UNCHANGED BEHAVIOR)
+   ========================= */
 @media (max-width:768px) {
+
   .menu-btn {
     display: block;
   }
@@ -99,14 +120,22 @@ body {
     padding: 10px;
   }
 
+  .socials {
+    justify-content: center;
+    gap: 14px;
+  }
+
   .nav-links .icon-btn {
     width: 46px;
     height: 46px;
   }
 }
 
-/* ===== DESKTOP NAV BUTTON FIX ===== */
+/* =========================
+   DESKTOP IMPROVEMENTS ONLY
+   ========================= */
 @media (min-width: 769px) {
+
   .nav-links a {
     font-size: 15px;
     padding: 10px 14px;
@@ -121,7 +150,7 @@ body {
     background: rgba(255,255,255,0.08);
   }
 
-  .nav-links .icon-btn {
+  .socials .icon-btn {
     width: 40px;
     height: 40px;
     font-size: 18px;
@@ -193,7 +222,7 @@ section {
   margin-top: 90px;
 }
 
-/* ===== ORIGINAL GRID GALLERY (RESTORED) ===== */
+/* ===== GALLERIES ===== */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -207,7 +236,6 @@ section {
   border-radius: 12px;
 }
 
-/* ===== SCROLL GALLERY (OPTIONAL USE) ===== */
 .scroll-gallery {
   display: flex;
   gap: 15px;
@@ -244,7 +272,7 @@ section {
   transform: scale(1.03);
 }
 
-/* ===== VIDEO GALLERY (GRID OPTION) ===== */
+/* ===== VIDEO GALLERY ===== */
 .video-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -262,11 +290,8 @@ section {
 /* ===== SOCIALS ===== */
 .socials {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 20px;
+  gap: 10px;
 }
 
 .socials .icon-btn {
