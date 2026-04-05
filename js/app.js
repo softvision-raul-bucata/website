@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   const images = document.querySelectorAll(".scroll-gallery img");
   let currentIndex = 0;
+  let touchStartX = 0;
+  let touchEndX = 0;
 
   if (images.length > 0) {
 
@@ -53,6 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
       border-radius: 12px;
       position: relative;
       z-index: 2;
+      pointer-events: none;
     `;
     lightbox.appendChild(img);
 
@@ -85,17 +88,24 @@ document.addEventListener("DOMContentLoaded", () => {
         align-items: center;
         justify-content: center;
         border-radius: 50%;
+        transition: background 0.2s;
       `;
+      btn.addEventListener("mouseenter", () => {
+        btn.style.background = "rgba(255,255,255,0.25)";
+      });
+      btn.addEventListener("mouseleave", () => {
+        btn.style.background = "rgba(255,255,255,0.1)";
+      });
       lightbox.appendChild(btn);
       return btn;
     }
 
-    const prev = makeBtn("‹", "left");
-    const next = makeBtn("›", "right");
+    const prev = makeBtn("&#8249;", "left");
+    const next = makeBtn("&#8250;", "right");
 
-    const close = document.createElement("div");
-    close.innerHTML = "✕";
-    close.style.cssText = `
+    const closeImg = document.createElement("div");
+    closeImg.innerHTML = "&#10005;";
+    closeImg.style.cssText = `
       position: absolute;
       top: 20px;
       right: 20px;
@@ -103,14 +113,34 @@ document.addEventListener("DOMContentLoaded", () => {
       color: white;
       cursor: pointer;
       z-index: 999999;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: background 0.2s;
     `;
-    lightbox.appendChild(close);
+    closeImg.addEventListener("mouseenter", () => {
+      closeImg.style.background = "rgba(255,255,255,0.25)";
+    });
+    closeImg.addEventListener("mouseleave", () => {
+      closeImg.style.background = "rgba(255,255,255,0.1)";
+    });
+    lightbox.appendChild(closeImg);
 
     function openImage(i) {
       currentIndex = i;
       img.src = images[i].src;
       counter.textContent = `${i + 1} / ${images.length}`;
       lightbox.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+      document.body.style.overflow = "";
     }
 
     function nextImage() {
@@ -126,16 +156,50 @@ document.addEventListener("DOMContentLoaded", () => {
       image.addEventListener("click", () => openImage(i));
     });
 
-    next.addEventListener("click", nextImage);
-    prev.addEventListener("click", prevImage);
+    next.addEventListener("click", (e) => {
+      e.stopPropagation();
+      nextImage();
+    });
 
-    close.addEventListener("click", () => {
-      lightbox.style.display = "none";
+    prev.addEventListener("click", (e) => {
+      e.stopPropagation();
+      prevImage();
+    });
+
+    closeImg.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeLightbox();
     });
 
     lightbox.addEventListener("click", (e) => {
       if (e.target === lightbox) {
-        lightbox.style.display = "none";
+        closeLightbox();
+      }
+    });
+
+    // Touch/swipe support
+    lightbox.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    lightbox.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          nextImage();
+        } else {
+          prevImage();
+        }
+      }
+    }, { passive: true });
+
+    // Keyboard support
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.style.display === "flex") {
+        if (e.key === "ArrowRight") nextImage();
+        if (e.key === "ArrowLeft") prevImage();
+        if (e.key === "Escape") closeLightbox();
       }
     });
   }
@@ -161,10 +225,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const container = document.createElement("div");
     container.style.cssText = `
+      position: relative;
       max-width: 90%;
       max-height: 80%;
     `;
     vLightbox.appendChild(container);
+
+    // Close button for video lightbox
+    const closeVid = document.createElement("div");
+    closeVid.innerHTML = "&#10005;";
+    closeVid.style.cssText = `
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      z-index: 999999;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: background 0.2s;
+    `;
+    closeVid.addEventListener("mouseenter", () => {
+      closeVid.style.background = "rgba(255,255,255,0.25)";
+    });
+    closeVid.addEventListener("mouseleave", () => {
+      closeVid.style.background = "rgba(255,255,255,0.1)";
+    });
+    vLightbox.appendChild(closeVid);
+
+    function closeVideoLightbox() {
+      vLightbox.style.display = "none";
+      container.innerHTML = "";
+      document.body.style.overflow = "";
+    }
 
     function openVideo(src) {
       container.innerHTML = "";
@@ -177,25 +276,50 @@ document.addEventListener("DOMContentLoaded", () => {
         width: 100%;
         max-height: 80vh;
         border-radius: 12px;
+        display: block;
       `;
 
       container.appendChild(video);
       vLightbox.style.display = "flex";
+      document.body.style.overflow = "hidden";
     }
 
     videos.forEach(v => {
+      // Pause gallery video and show pointer
+      v.controls = false;
       v.style.cursor = "pointer";
 
-      v.addEventListener("click", () => {
-        const src = v.querySelector("source")?.src;
+      v.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        // Pause the original gallery video
+        v.pause();
+
+        // Get source correctly
+        const sourceEl = v.querySelector("source");
+        const src = sourceEl
+          ? sourceEl.getAttribute("src")
+          : v.getAttribute("src");
+
         if (src) openVideo(src);
       });
     });
 
+    closeVid.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeVideoLightbox();
+    });
+
     vLightbox.addEventListener("click", (e) => {
       if (e.target === vLightbox) {
-        vLightbox.style.display = "none";
-        container.innerHTML = "";
+        closeVideoLightbox();
+      }
+    });
+
+    // Keyboard support for video lightbox
+    document.addEventListener("keydown", (e) => {
+      if (vLightbox.style.display === "flex") {
+        if (e.key === "Escape") closeVideoLightbox();
       }
     });
   }
