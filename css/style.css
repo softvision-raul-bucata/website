@@ -183,6 +183,17 @@ section {
   text-decoration: none;
 }
 
+/* PHONE BUTTON */
+.phone-btn {
+  display: inline-flex;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  text-decoration: none;
+}
+
 /* FOOTER */
 footer {
   text-align: center;
