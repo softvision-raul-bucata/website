@@ -34,7 +34,6 @@ body {
   font-size: 18px;
 }
 
-/* NAV LINKS BASE */
 .nav-links {
   display: flex;
   align-items: center;
@@ -53,7 +52,6 @@ body {
   opacity: 1;
 }
 
-/* SOCIAL ICONS (NAV) */
 .icon-btn {
   width: 38px;
   height: 38px;
@@ -107,9 +105,8 @@ body {
   }
 }
 
-/* ===== DESKTOP NAV BUTTON UPGRADE (NEW FIX) ===== */
+/* ===== DESKTOP NAV BUTTON FIX ===== */
 @media (min-width: 769px) {
-
   .nav-links a {
     font-size: 15px;
     padding: 10px 14px;
@@ -196,46 +193,46 @@ section {
   margin-top: 90px;
 }
 
-/* ===== INFO BOX ===== */
-.info-box {
-  max-width: 800px;
-  margin: 25px auto 0;
-  padding: 18px;
-  background: #111;
-  border-radius: 12px;
-  opacity: 0.9;
-}
+/* ===== IMAGE GALLERY (OLD GRID REMOVED) ===== */
 
-/* ===== IMAGE GALLERY ===== */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+/* ===== SCROLL GALLERY (NEW) ===== */
+.scroll-gallery {
+  display: flex;
   gap: 15px;
+  overflow-x: auto;
+  padding: 10px 5px;
   max-width: 1000px;
   margin: auto;
+  scroll-snap-type: x mandatory;
 }
 
-.gallery img {
-  width: 100%;
+.scroll-gallery::-webkit-scrollbar {
+  height: 6px;
+}
+
+.scroll-gallery::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+}
+
+.scroll-gallery img,
+.scroll-gallery video {
+  flex: 0 0 auto;
+  width: 280px;
+  height: 180px;
+  object-fit: cover;
   border-radius: 12px;
-}
-
-/* ===== VIDEO GALLERY ===== */
-.video-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
-  max-width: 1000px;
-  margin: auto;
-}
-
-.video-gallery video {
-  width: 100%;
-  border-radius: 12px;
+  scroll-snap-align: start;
   background: black;
+  transition: transform 0.2s ease;
 }
 
-/* ===== SOCIALS (UNCHANGED - GOOD AS IS) ===== */
+.scroll-gallery img:hover,
+.scroll-gallery video:hover {
+  transform: scale(1.03);
+}
+
+/* ===== SOCIALS ===== */
 .socials {
   display: flex;
   justify-content: center;
@@ -248,11 +245,7 @@ section {
 .socials .icon-btn {
   width: 44px;
   height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-radius: 12px;
-  background: rgba(255,255,255,0.06);
   font-size: 18px;
   transition: 0.2s ease;
 }
