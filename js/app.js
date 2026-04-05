@@ -205,123 +205,169 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // =========================
-  // VIDEO LIGHTBOX
-  // =========================
-  const videos = document.querySelectorAll(".scroll-gallery video");
+// VIDEO LIGHTBOX (UPDATED)
+// =========================
+const videos = document.querySelectorAll(".scroll-gallery video");
 
-  if (videos.length > 0) {
+let currentVideoIndex = 0;
 
-    const vLightbox = document.createElement("div");
-    vLightbox.style.cssText = `
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 99999;
-    `;
-    document.body.appendChild(vLightbox);
+if (videos.length > 0) {
 
-    const container = document.createElement("div");
-    container.style.cssText = `
-      position: relative;
-      max-width: 90%;
-      max-height: 80%;
-    `;
-    vLightbox.appendChild(container);
+  const vLightbox = document.createElement("div");
+  vLightbox.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 99999;
+  `;
+  document.body.appendChild(vLightbox);
 
-    // Close button for video lightbox
-    const closeVid = document.createElement("div");
-    closeVid.innerHTML = "&#10005;";
-    closeVid.style.cssText = `
+  const container = document.createElement("div");
+  container.style.cssText = `
+    position: relative;
+    max-width: 90%;
+    max-height: 80%;
+  `;
+  vLightbox.appendChild(container);
+
+  // Counter
+  const counter = document.createElement("div");
+  counter.style.cssText = `
+    color: white;
+    margin-top: 10px;
+    font-size: 14px;
+  `;
+  vLightbox.appendChild(counter);
+
+  function makeBtn(text, side) {
+    const btn = document.createElement("div");
+    btn.innerHTML = text;
+    btn.style.cssText = `
       position: absolute;
-      top: 20px;
-      right: 20px;
-      font-size: 30px;
+      top: 50%;
+      ${side}: 20px;
+      transform: translateY(-50%);
+      font-size: 45px;
       color: white;
       cursor: pointer;
       z-index: 999999;
-      width: 40px;
-      height: 40px;
+      background: rgba(255,255,255,0.1);
+      width: 55px;
+      height: 55px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255,255,255,0.1);
       border-radius: 50%;
-      transition: background 0.2s;
     `;
-    closeVid.addEventListener("mouseenter", () => {
-      closeVid.style.background = "rgba(255,255,255,0.25)";
-    });
-    closeVid.addEventListener("mouseleave", () => {
-      closeVid.style.background = "rgba(255,255,255,0.1)";
-    });
-    vLightbox.appendChild(closeVid);
-
-    function closeVideoLightbox() {
-      vLightbox.style.display = "none";
-      container.innerHTML = "";
-      document.body.style.overflow = "";
-    }
-
-    function openVideo(src) {
-      container.innerHTML = "";
-
-      const video = document.createElement("video");
-      video.src = src;
-      video.controls = true;
-      video.autoplay = true;
-      video.style.cssText = `
-        width: 100%;
-        max-height: 80vh;
-        border-radius: 12px;
-        display: block;
-      `;
-
-      container.appendChild(video);
-      vLightbox.style.display = "flex";
-      document.body.style.overflow = "hidden";
-    }
-
-    videos.forEach(v => {
-      // Pause gallery video and show pointer
-      v.controls = false;
-      v.style.cursor = "pointer";
-
-      v.addEventListener("click", (e) => {
-        e.preventDefault();
-
-        // Pause the original gallery video
-        v.pause();
-
-        // Get source correctly
-        const sourceEl = v.querySelector("source");
-        const src = sourceEl
-          ? sourceEl.getAttribute("src")
-          : v.getAttribute("src");
-
-        if (src) openVideo(src);
-      });
-    });
-
-    closeVid.addEventListener("click", (e) => {
-      e.stopPropagation();
-      closeVideoLightbox();
-    });
-
-    vLightbox.addEventListener("click", (e) => {
-      if (e.target === vLightbox) {
-        closeVideoLightbox();
-      }
-    });
-
-    // Keyboard support for video lightbox
-    document.addEventListener("keydown", (e) => {
-      if (vLightbox.style.display === "flex") {
-        if (e.key === "Escape") closeVideoLightbox();
-      }
-    });
+    vLightbox.appendChild(btn);
+    return btn;
   }
+
+  const prev = makeBtn("&#8249;", "left");
+  const next = makeBtn("&#8250;", "right");
+
+  // Close button
+  const closeVid = document.createElement("div");
+  closeVid.innerHTML = "&#10005;";
+  closeVid.style.cssText = `
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+    z-index: 999999;
+  `;
+  vLightbox.appendChild(closeVid);
+
+  function getVideoSrc(videoEl) {
+    const sourceEl = videoEl.querySelector("source");
+    return sourceEl
+      ? sourceEl.getAttribute("src")
+      : videoEl.getAttribute("src");
+  }
+
+  function openVideo(index) {
+    currentVideoIndex = index;
+
+    container.innerHTML = "";
+
+    const video = document.createElement("video");
+    video.src = getVideoSrc(videos[index]);
+    video.controls = true;
+    video.autoplay = true;
+    video.style.cssText = `
+      width: 100%;
+      max-height: 80vh;
+      border-radius: 12px;
+    `;
+
+    container.appendChild(video);
+
+    counter.textContent = `${index + 1} / ${videos.length}`;
+
+    vLightbox.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeVideoLightbox() {
+    vLightbox.style.display = "none";
+    container.innerHTML = "";
+    document.body.style.overflow = "";
+  }
+
+  function nextVideo() {
+    openVideo((currentVideoIndex + 1) % videos.length);
+  }
+
+  function prevVideo() {
+    openVideo((currentVideoIndex - 1 + videos.length) % videos.length);
+  }
+
+  videos.forEach((v, i) => {
+    v.controls = false;
+    v.style.cursor = "pointer";
+
+    v.addEventListener("click", (e) => {
+      e.preventDefault();
+      v.pause();
+      openVideo(i);
+    });
+  });
+
+  next.addEventListener("click", (e) => {
+    e.stopPropagation();
+    nextVideo();
+  });
+
+  prev.addEventListener("click", (e) => {
+    e.stopPropagation();
+    prevVideo();
+  });
+
+  closeVid.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeVideoLightbox();
+  });
+
+  vLightbox.addEventListener("click", (e) => {
+    if (e.target === vLightbox) {
+      closeVideoLightbox();
+    }
+  });
+
+  // Keyboard support
+  document.addEventListener("keydown", (e) => {
+    if (vLightbox.style.display === "flex") {
+      if (e.key === "ArrowRight") nextVideo();
+      if (e.key === "ArrowLeft") prevVideo();
+      if (e.key === "Escape") closeVideoLightbox();
+    }
+  });
+}
 
 });
