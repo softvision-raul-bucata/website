@@ -1,24 +1,27 @@
-const menu = document.getElementById("menu");
-const menuBtn = document.querySelector(".menu-btn");
-const navLinks = document.querySelectorAll(".nav-links a");
-
-menuBtn.addEventListener("click", () => {
-  menu.classList.toggle("active");
-});
-
-navLinks.forEach(link => {
-  link.addEventListener("click", () => {
-    menu.classList.remove("active");
-  });
-});
-
-document.addEventListener("click", (e) => {
-  if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
-    menu.classList.remove("active");
-  }
-});
-
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ===== MENU =====
+  const menu = document.getElementById("menu");
+  const menuBtn = document.querySelector(".menu-btn");
+  const navLinks = document.querySelectorAll(".nav-links a");
+
+  menuBtn.addEventListener("click", () => {
+    menu.classList.toggle("active");
+  });
+
+  navLinks.forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("active");
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && !menuBtn.contains(e.target)) {
+      menu.classList.remove("active");
+    }
+  });
+
+  // ===== GALLERY LIGHTBOX =====
   const images = document.querySelectorAll(".scroll-gallery img");
 
   console.log("Gallery images found:", images.length);
@@ -51,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
     image.style.cursor = "pointer";
 
     image.addEventListener("click", () => {
-      console.log("clicked image:", image.src);
       open(image.src);
     });
   });
@@ -59,4 +61,5 @@ document.addEventListener("DOMContentLoaded", () => {
   lightbox.addEventListener("click", () => {
     lightbox.style.display = "none";
   });
+
 });
