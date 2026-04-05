@@ -28,21 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const images = document.querySelectorAll(".scroll-gallery img");
   let currentIndex = 0;
 
-  // LIGHTBOX
+  // LIGHTBOX IMAGES
   document.addEventListener("DOMContentLoaded", () => {
 
-  const images = Array.from(document.querySelectorAll(".scroll-gallery img"));
-  const videos = Array.from(document.querySelectorAll(".scroll-gallery video"));
-
-  // BUILD UNIFIED MEDIA LIST
-  const media = [
-    ...images.map(el => ({ type: "img", src: el.src })),
-    ...videos.map(el => ({ type: "video", src: el.querySelector("source").src }))
-  ];
+  const images = document.querySelectorAll(".scroll-gallery img");
 
   let currentIndex = 0;
 
-  // LIGHTBOX
   const lightbox = document.createElement("div");
   lightbox.style.cssText = `
     position: fixed;
@@ -56,55 +48,48 @@ document.addEventListener("DOMContentLoaded", () => {
   `;
   document.body.appendChild(lightbox);
 
-  // MEDIA CONTAINER
-  const container = document.createElement("div");
-  container.style.cssText = `
+  const img = document.createElement("img");
+  img.style.cssText = `
     max-width: 90%;
     max-height: 80%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 12px;
   `;
-  lightbox.appendChild(container);
+  lightbox.appendChild(img);
 
-  // COUNTER
   const counter = document.createElement("div");
   counter.style.cssText = `
     color: white;
     margin-top: 10px;
     font-size: 14px;
-    opacity: 0.8;
   `;
   lightbox.appendChild(counter);
 
-  // NAV BUTTONS
-  const prevBtn = document.createElement("div");
-  const nextBtn = document.createElement("div");
+  const prev = document.createElement("div");
+  const next = document.createElement("div");
 
-  [prevBtn, nextBtn].forEach(btn => {
+  [prev, next].forEach(btn => {
     btn.style.cssText = `
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 42px;
+      font-size: 40px;
       color: white;
       cursor: pointer;
-      user-select: none;
+      z-index: 10000;
       padding: 10px;
     `;
     lightbox.appendChild(btn);
   });
 
-  prevBtn.style.left = "20px";
-  nextBtn.style.right = "20px";
+  prev.style.left = "20px";
+  next.style.right = "20px";
 
-  prevBtn.innerHTML = "‹";
-  nextBtn.innerHTML = "›";
+  prev.innerHTML = "‹";
+  next.innerHTML = "›";
 
-  // CLOSE
-  const closeBtn = document.createElement("div");
-  closeBtn.innerHTML = "✕";
-  closeBtn.style.cssText = `
+  const close = document.createElement("div");
+  close.innerHTML = "✕";
+  close.style.cssText = `
     position: absolute;
     top: 20px;
     right: 25px;
@@ -112,123 +97,93 @@ document.addEventListener("DOMContentLoaded", () => {
     color: white;
     cursor: pointer;
   `;
-  lightbox.appendChild(closeBtn);
+  lightbox.appendChild(close);
 
-  let currentVideo = null;
-
-  // OPEN MEDIA
-  function openMedia(index) {
-    currentIndex = index;
-
-    container.innerHTML = "";
-
-    const item = media[index];
-
-    counter.textContent = `${index + 1} / ${media.length}`;
-
-    if (item.type === "img") {
-      const img = document.createElement("img");
-      img.src = item.src;
-      img.style.cssText = `
-        max-width: 100%;
-        max-height: 80vh;
-        border-radius: 12px;
-      `;
-      container.appendChild(img);
-    }
-
-    if (item.type === "video") {
-      const video = document.createElement("video");
-      video.src = item.src;
-      video.controls = true;
-      video.autoplay = true;
-      video.style.cssText = `
-        max-width: 100%;
-        max-height: 80vh;
-        border-radius: 12px;
-      `;
-      container.appendChild(video);
-      currentVideo = video;
-    }
-
+  function openImage(i) {
+    currentIndex = i;
+    img.src = images[i].src;
+    counter.textContent = `${i + 1} / ${images.length}`;
     lightbox.style.display = "flex";
   }
 
-  function nextMedia() {
-    stopVideo();
-    currentIndex = (currentIndex + 1) % media.length;
-    openMedia(currentIndex);
+  function nextImage() {
+    openImage((currentIndex + 1) % images.length);
   }
 
-  function prevMedia() {
-    stopVideo();
-    currentIndex = (currentIndex - 1 + media.length) % media.length;
-    openMedia(currentIndex);
+  function prevImage() {
+    openImage((currentIndex - 1 + images.length) % images.length);
   }
 
-  function stopVideo() {
-    if (currentVideo) {
-      currentVideo.pause();
-      currentVideo = null;
-    }
-  }
-
-  // CLICK EVENTS
-  images.forEach((el, i) => {
-    el.style.cursor = "pointer";
-    el.addEventListener("click", () => {
-      const index = media.findIndex(m => m.type === "img" && m.src === el.src);
-      openMedia(index);
-    });
+  images.forEach((image, i) => {
+    image.style.cursor = "pointer";
+    image.addEventListener("click", () => openImage(i));
   });
 
-  videos.forEach((el, i) => {
-    el.style.cursor = "pointer";
-    el.addEventListener("click", () => {
-      const src = el.querySelector("source").src;
-      const index = media.findIndex(m => m.type === "video" && m.src === src);
-      openMedia(index);
-    });
+  next.onclick = nextImage;
+  prev.onclick = prevImage;
+  close.onclick = () => lightbox.style.display = "none";
+
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) lightbox.style.display = "none";
   });
 
-  nextBtn.addEventListener("click", nextMedia);
-  prevBtn.addEventListener("click", prevMedia);
+});
 
-  closeBtn.addEventListener("click", () => {
-    stopVideo();
-    lightbox.style.display = "none";
+ // LIGHTBOX VIDEOS
+document.addEventListener("DOMContentLoaded", () => {
+
+  const videos = document.querySelectorAll(".scroll-gallery video");
+
+  const lightbox = document.createElement("div");
+  lightbox.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  `;
+  document.body.appendChild(lightbox);
+
+  const container = document.createElement("div");
+  container.style.cssText = `
+    max-width: 90%;
+    max-height: 80%;
+  `;
+  lightbox.appendChild(container);
+
+  function openVideo(videoSrc) {
+    container.innerHTML = "";
+
+    const video = document.createElement("video");
+    video.src = videoSrc;
+    video.controls = true;
+    video.autoplay = true;
+    video.style.cssText = `
+      width: 100%;
+      max-height: 80vh;
+      border-radius: 12px;
+    `;
+
+    container.appendChild(video);
+    lightbox.style.display = "flex";
+  }
+
+  videos.forEach(v => {
+    v.style.cursor = "pointer";
+
+    v.addEventListener("click", () => {
+      const src = v.querySelector("source").src;
+      openVideo(src);
+    });
   });
 
   lightbox.addEventListener("click", (e) => {
     if (e.target === lightbox) {
-      stopVideo();
       lightbox.style.display = "none";
+      container.innerHTML = "";
     }
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (lightbox.style.display !== "flex") return;
-
-    if (e.key === "Escape") {
-      stopVideo();
-      lightbox.style.display = "none";
-    }
-    if (e.key === "ArrowRight") nextMedia();
-    if (e.key === "ArrowLeft") prevMedia();
-  });
-
-  // SWIPE
-  let startX = 0;
-
-  lightbox.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-  });
-
-  lightbox.addEventListener("touchend", (e) => {
-    let endX = e.changedTouches[0].clientX;
-
-    if (startX - endX > 50) nextMedia();
-    if (endX - startX > 50) prevMedia();
   });
 
 });
